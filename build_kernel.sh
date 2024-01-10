@@ -4,25 +4,33 @@
 
 ARM64_COMPILER_PATH=
 BSP_SOURCES_PATH=
-JETSON_LINUX_VERSION=r35_release_v4.1
+OUTPUT_PATH=
 
 ########### END OF USER EDITABLE SECTION #########
 
-JETSON_LINUX_VERSION="${USER_JETPACK_VERSION:=r35_release_v4.1}"
-
 ARM64_COMPILER_PATH="${ARM64_COMPILER_PATH:=$(pwd)/utils/aarch64--glibc--stable-final}"
-BSP_SOURCES_PATH="${BSP_SOURCES_PATH:=$(pwd)/srcs/}"
-NVIDIA_SOURCES_URL="https://developer.nvidia.com/downloads/embedded/l4t/"$JETSON_LINUX_VERSION"/sources/public_sources.tbz2"
+BSP_SOURCES_PATH="${BSP_SOURCES_PATH:=$(pwd)/srcs}"
+OUTPUT_PATH="${OUTPUT_PATH:=$(pwd)/out}"
 
-############ Download BSP sources ###############
-echo "==== Downloading NVIDIA Kernel sources. Please wait! ==== \n"
-wget $NVIDIA_SOURCES_URL -P $BSP_SOURCES_PATH
+############ Compile BSP sources ###############
+echo -n "==== Checking for sources in directory: "
+echo -e "$BSP_SOURCES_PATH ====\n"
+if [ ! -d $BSP_SOURCES_PATH/kernel ] || [ ! -d $BSP_SOURCES_PATH/hardware ] || [ ! -f $BSP_SOURCES_PATH/nvbuild.sh ]; then
+    echo -e "==== ERROR! ===="
+    echo -e "Sources not found. Execute getsources.sh or correct BSP_SOURCES_PATH variable\n"
+    exit 1
+fi
+echo -e "==== Kernel sources found! ====\n"
 
-echo "==== Extracting Kernel sources. Please wait! ==== \n"
-tar -xpf $BSP_SOURCES_PATH/public_sources.tbz2 -C $BSP_SOURCES_PATH "Linux_for_Tegra/source/public/kernel_src.tbz2"
-mv $BSP_SOURCES_PATH/Linux_for_Tegra/source/public/kernel_src.tbz2 $BSP_SOURCES_PATH/kernel_src.tbz2
-rm -r $BSP_SOURCES_PATH/Linux_for_Tegra
-rm $BSP_SOURCES_PATH/public_sources.tbz2
-tar -xpf $BSP_SOURCES_PATH/kernel_src.tbz2 -C $BSP_SOURCES_PATH/
-rm $BSP_SOURCES_PATH/kernel_src.tbz2
-echo "==== Done extracting. ==== \n"
+echo -n "==== Checking for compiler in directory: "
+echo -e "$ARM64_COMPILER_PATH ==== \n"
+if [ ! -f $ARM64_COMPILER_PATH/bin/aarch64-buildroot-linux-gnu-gcc ]; then
+    echo -e "==== ERROR! ===="
+    echo -e "Compiler not found. Execute getsources.sh or correct ARM64_COMPILER_PATH variable\n"
+    exit 1
+fi
+echo -e "==== Compiler found! ====\n"
+
+echo -e "==== Starting Kernel build! ====\n"
+export CROSS_COMPILE_AARCH64_PATH=$ARM64_COMPILER_PATH/
+$BSP_SOURCES_PATH/nvbuild.sh -o $OUTPUT_PATH

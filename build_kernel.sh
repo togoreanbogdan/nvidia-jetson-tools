@@ -13,8 +13,7 @@ BSP_SOURCES_PATH="${BSP_SOURCES_PATH:=$(pwd)/srcs}"
 OUTPUT_PATH="${OUTPUT_PATH:=$(pwd)/out}"
 
 ############ Compile BSP sources ###############
-echo -n "==== Checking for sources in directory: "
-echo -e "$BSP_SOURCES_PATH ====\n"
+echo -e "==== Checking for sources in directory: $BSP_SOURCES_PATH ====\n"
 if [ ! -d $BSP_SOURCES_PATH/kernel ] || [ ! -d $BSP_SOURCES_PATH/hardware ] || [ ! -f $BSP_SOURCES_PATH/nvbuild.sh ]; then
     echo -e "==== ERROR! ===="
     echo -e "Sources not found. Execute getsources.sh or correct BSP_SOURCES_PATH variable\n"
@@ -22,8 +21,7 @@ if [ ! -d $BSP_SOURCES_PATH/kernel ] || [ ! -d $BSP_SOURCES_PATH/hardware ] || [
 fi
 echo -e "==== Kernel sources found! ====\n"
 
-echo -n "==== Checking for compiler in directory: "
-echo -e "$ARM64_COMPILER_PATH ==== \n"
+echo -e "==== Checking for compiler in directory: $ARM64_COMPILER_PATH ==== \n"
 if [ ! -f $ARM64_COMPILER_PATH/bin/aarch64-buildroot-linux-gnu-gcc ]; then
     echo -e "==== ERROR! ===="
     echo -e "Compiler not found. Execute getsources.sh or correct ARM64_COMPILER_PATH variable\n"

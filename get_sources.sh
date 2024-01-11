@@ -7,9 +7,9 @@ BSP_SOURCES_PATH=$(pwd)/srcs
 JETSON_LINUX_VERSION=r35_release_v4.1
 TAG=v1.0.0
 SOURCE_INFO=(
-"kernel/nvidia;https://github.com/togoreanbogdan/linux-nvidia.git;$TAG"
+"kernel/nvidia;git@github.com:togoreanbogdan/linux-nvidia.git;$TAG"
 "kernel/nvidia/drivers/net/ethernet/nvidia/nvethernet/nvethernetrm;https://nv-tegra.nvidia.com/kernel/nvethernetrm.git;jetson_35.4.1"
-"hardware/nvidia/platform/t23x/p3768/kernel-dts;https://github.com/togoreanbogdan/hardware-nvidia-platform-t23x-p3768-dts.git;$TAG"
+"hardware/nvidia/platform/t23x/p3768/kernel-dts;git@github.com:togoreanbogdan/hardware-nvidia-platform-t23x-p3768-dts.git;$TAG"
 )
 CLONE_SOURCES=1
 

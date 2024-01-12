@@ -13,6 +13,13 @@ ARM64_COMPILER_PATH="${ARM64_COMPILER_PATH:=$(pwd)/utils/aarch64--glibc--stable-
 BSP_SOURCES_PATH="${BSP_SOURCES_PATH:=$(pwd)/srcs}"
 OUTPUT_PATH="${OUTPUT_PATH:=$(pwd)/out}"
 OUTPUT_ARTIFACTS="${OUTPUT_ARTIFACTS:=$(pwd)/release}"
+REQUIRED_TOOLS=("make" "flex" "tar" "bc")
+
+########### FUNCTIONS SECTION #########
+
+check_tools() {
+    command -v "$1" >/dev/null 2>&1 || { echo >&2 "$1 is not installed. Please install it with apt-get."; exit 1; }
+}
 
 ############ Compile BSP sources ###############
 echo -e "==== Checking for sources in directory: $BSP_SOURCES_PATH ====\n"
@@ -31,6 +38,12 @@ if [ ! -f $ARM64_COMPILER_PATH/bin/aarch64-buildroot-linux-gnu-gcc ]; then
 fi
 echo -e "==== Compiler found! ====\n"
 
+############ CHECK IF REQUIRED TOOLS ARE INSTALLED ###############
+for tool in "${REQUIRED_TOOLS[@]}"; do
+    check_tools "$tool"
+done
+
+############ ACTUAL KERNEL,DTBS AND MODULES BUILD ###############
 echo -e "==== Starting Kernel build! Please wait. ====\n"
 export CROSS_COMPILE_AARCH64_PATH=$ARM64_COMPILER_PATH
 $BSP_SOURCES_PATH/nvbuild.sh -o $OUTPUT_PATH

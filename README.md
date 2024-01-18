@@ -29,4 +29,5 @@ The target destination folders for artifacts are:
 For example the following command can be used on the target:
 ```
   sudo tar -xpvf kernel_modules.tbz2 -C /usr/
+  sudo depmod -a
 ```
